@@ -67,7 +67,6 @@ std::vector<Run> measure(bool fixed_seed) {
         Run measurement{seed, 0, 0};
         {
             QuietOutput quiet;
-            const auto start = std::chrono::steady_clock::now();
             // Rebuild inputs and shortest-path cache for every independent run.
             auto landmarks = load_landmarks(DATA_DIR + "/landmarks.csv");
             auto nodes = load_nodes(DATA_DIR + "/nodes.csv");
@@ -82,9 +81,12 @@ std::vector<Run> measure(bool fixed_seed) {
             std::vector<long long> sources(source_set.begin(), source_set.end());
             PathCache cache(graph, sources);
             RNG rng(seed);
+            // Measure only GA search, matching main.cpp's elapsed-time scope.
+            const auto start = std::chrono::steady_clock::now();
             auto result = run_ga(landmarks, cache, gate_node, rng);
+            const auto end = std::chrono::steady_clock::now();
             measurement.seconds = std::chrono::duration<double>(
-                std::chrono::steady_clock::now() - start).count();
+                end - start).count();
             if (!result.best_eval.is_valid) throw std::runtime_error("No feasible solution.");
             measurement.fitness = result.best_eval.fitness;
         }
@@ -182,7 +184,7 @@ int orienteering::run_rating(int argc, char* argv[]) {
                 } else throw std::runtime_error("Unknown/incomplete argument: " + arg);
             }
             std::cout << "10 runs; SD divisor=10; seeds=" << (fixed ? "fixed" : "base+i")
-                      << "\nTiming: CSV load + graph/cache construction + GA; excludes output and process startup.\n";
+                      << "\nTiming: GA search only (run_ga); excludes CSV load, graph/cache construction and output.\n";
             const auto runs = measure(fixed);
             const auto summary = summarize(output, runs);
             save(output, runs);
