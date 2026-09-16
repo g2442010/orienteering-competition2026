@@ -1,8 +1,14 @@
 # ビルド成果物（pushしない）
 *.o
+*.obj
+build/
+.vs/
+*.vcxproj.user
 *.dSYM/
 orienteering
 orienteering.exe
+rating
+rating.exe
 
 # 生成される出力（実行時に自動生成されるため追跡しない）
 output/
@@ -12,3 +18,9 @@ fix_note/
 
 # エディタ設定（環境依存・ローカル専用）
 .vscode/
+
+# Visual Studio プロジェクト・Word 文書
+*.sln
+*.vcxproj
+*.filters
+*.docx

@@ -1,7 +1,7 @@
 CXX      = g++
 CXXFLAGS = -std=c++17 -O2 -Wall -Wextra
 
-SOURCES  = csv_loader.cpp graph.cpp evaluate.cpp ga.cpp main.cpp
+SOURCES  = csv_loader.cpp graph.cpp evaluate.cpp ga.cpp rating.cpp main.cpp
 OBJECTS  = $(SOURCES:.cpp=.o)
 TARGET   = orienteering
 
